@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Gerador de Notificações</string>
+    <string name="channel_name">Canal de Notificações de Teste</string>
+    <string name="channel_description">Exibe notificações personalizadas com fotos e alertas</string>
+</resources>
