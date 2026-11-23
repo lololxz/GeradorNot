@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var cachedImagePath: String? = null
 
-    // Seletor de imagens da galeria
+    // Seletor de fotos da galeria
     private val pickImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let { handleSelectedImage(it) }
@@ -51,11 +51,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Criar o canal de notificação logo ao iniciar
-        NotificationHelper.createNotificationChannel(this)
-
         checkAndRequestNotificationPermission()
         setupListeners()
+        setupPresets()
     }
 
     private fun checkAndRequestNotificationPermission() {
@@ -67,8 +65,41 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupPresets() {
+        binding.btnPresetNubank.setOnClickListener {
+            binding.etAppName.setText("Nubank")
+            binding.etTitle.setText("Transferência recebida")
+            binding.etMessage.setText("Você recebeu uma transferência Pix de R$ 1.500,00 de Banco Central.")
+            binding.rbPix.isChecked = true
+            Toast.makeText(this, "Preset Nubank aplicado!", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.btnPresetWhatsApp.setOnClickListener {
+            binding.etAppName.setText("WhatsApp")
+            binding.etTitle.setText("Contato")
+            binding.etMessage.setText("Oi! Você já viu as novas fotos que te enviei?")
+            binding.rbStandard.isChecked = true
+            Toast.makeText(this, "Preset WhatsApp aplicado!", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.btnPresetInstagram.setOnClickListener {
+            binding.etAppName.setText("Instagram")
+            binding.etTitle.setText("Nova publicação")
+            binding.etMessage.setText("Um usuário acabou de publicar uma nova foto. Toque para ver.")
+            binding.rbBigPicture.isChecked = true
+            Toast.makeText(this, "Preset Instagram aplicado!", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.btnPresetMercadoPago.setOnClickListener {
+            binding.etAppName.setText("Mercado Pago")
+            binding.etTitle.setText("Pix recebido!")
+            binding.etMessage.setText("Você recebeu um Pix de R$ 380,00 na sua conta.")
+            binding.rbPix.isChecked = true
+            Toast.makeText(this, "Preset Mercado Pago aplicado!", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun setupListeners() {
-        // Escolha da imagem
         binding.layoutSelectImage.setOnClickListener {
             pickImageLauncher.launch("image/*")
         }
@@ -76,31 +107,6 @@ class MainActivity : AppCompatActivity() {
             pickImageLauncher.launch("image/*")
         }
 
-        // Sugestões automáticas ao mudar o tipo de notificação
-        binding.rgNotifType.setOnCheckedChangeListener { _, checkedId ->
-            when (checkedId) {
-                R.id.rbPix -> {
-                    if (binding.etTitle.text.isNullOrBlank() || binding.etTitle.text.toString() == "Notícia Urgente") {
-                        binding.etTitle.setText("Nubank")
-                        binding.etMessage.setText("Você recebeu uma transferência Pix de R$ 1.500,00 de Banco Central.")
-                    }
-                }
-                R.id.rbBigPicture -> {
-                    if (binding.etTitle.text.toString() == "Nubank") {
-                        binding.etTitle.setText("Nova Foto em Destaque")
-                        binding.etMessage.setText("Veja a imagem completa que acaba de ser compartilhada com você.")
-                    }
-                }
-                R.id.rbStandard -> {
-                    if (binding.etTitle.text.toString() == "Nova Foto em Destaque") {
-                        binding.etTitle.setText("Mensagem Importante")
-                        binding.etMessage.setText("Você recebeu uma nova mensagem com foto.")
-                    }
-                }
-            }
-        }
-
-        // Botão disparar notificação
         binding.btnTriggerNotification.setOnClickListener {
             triggerNotification()
         }
@@ -109,14 +115,12 @@ class MainActivity : AppCompatActivity() {
     private fun handleSelectedImage(uri: Uri) {
         try {
             contentResolver.openInputStream(uri)?.use { inputStream ->
-                // Carregar bitmap com escala segura
                 val options = BitmapFactory.Options().apply {
-                    inSampleSize = 2 // Evitar estouro de memória
+                    inSampleSize = 2
                 }
                 val bitmap = BitmapFactory.decodeStream(inputStream, null, options)
 
                 if (bitmap != null) {
-                    // Salvar temporariamente no cache interno
                     val cacheFile = File(cacheDir, "temp_notification_image.png")
                     val out = FileOutputStream(cacheFile)
                     bitmap.compress(Bitmap.CompressFormat.PNG, 90, out)
@@ -125,7 +129,6 @@ class MainActivity : AppCompatActivity() {
 
                     cachedImagePath = cacheFile.absolutePath
 
-                    // Atualizar preview visual na tela
                     binding.ivPreview.setImageBitmap(bitmap)
                     binding.ivPreview.visibility = View.VISIBLE
                     binding.placeholderContainer.visibility = View.GONE
@@ -141,8 +144,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun triggerNotification() {
-        val title = binding.etTitle.text.toString().trim().ifEmpty { "Notificação de Teste" }
-        val message = binding.etMessage.text.toString().trim().ifEmpty { "Mensagem de teste gerada." }
+        val appName = binding.etAppName.text.toString().trim().ifEmpty { "Notificação" }
+        val title = binding.etTitle.text.toString().trim().ifEmpty { "Nova Notificação" }
+        val message = binding.etMessage.text.toString().trim().ifEmpty { "Mensagem de teste." }
 
         val type = when (binding.rgNotifType.checkedRadioButtonId) {
             R.id.rbBigPicture -> NotificationHelper.TYPE_BIG_PICTURE
@@ -158,25 +162,31 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (delaySeconds == 0) {
-            // Disparo imediato
             NotificationHelper.showNotification(
                 context = this,
+                appName = appName,
                 title = title,
                 message = message,
                 type = type,
                 imagePath = cachedImagePath
             )
-            Toast.makeText(this, "Notificação enviada com sucesso!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Notificação de $appName disparada!", Toast.LENGTH_SHORT).show()
         } else {
-            // Agendamento com AlarmManager para funcionar mesmo com tela bloqueada
-            scheduleNotification(title, message, type, delaySeconds)
+            scheduleNotification(appName, title, message, type, delaySeconds)
         }
     }
 
-    private fun scheduleNotification(title: String, message: String, type: String, delaySeconds: Int) {
+    private fun scheduleNotification(
+        appName: String,
+        title: String,
+        message: String,
+        type: String,
+        delaySeconds: Int
+    ) {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val intent = Intent(this, NotificationReceiver::class.java).apply {
+            putExtra("EXTRA_APP_NAME", appName)
             putExtra("EXTRA_TITLE", title)
             putExtra("EXTRA_MESSAGE", message)
             putExtra("EXTRA_TYPE", type)
@@ -209,11 +219,10 @@ class MainActivity : AppCompatActivity() {
 
             Toast.makeText(
                 this,
-                "⏰ Notificação agendada para daqui a $delaySeconds segundos! Bloqueie a tela para testar.",
+                "⏰ Notificação de $appName agendada para daqui a $delaySeconds segundos! Bloqueie a tela para testar.",
                 Toast.LENGTH_LONG
             ).show()
         } catch (e: SecurityException) {
-            // Fallback caso não tenha permissão de alarme exato no Android 14+
             alarmManager.set(
                 AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 triggerTime,

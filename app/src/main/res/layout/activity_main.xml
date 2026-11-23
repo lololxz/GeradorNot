@@ -45,13 +45,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Personalize imagens, estilos e timers"
+                    android:text="Alterne nomes, imagens, estilos e timers"
                     android:textColor="@color/text_secondary"
                     android:textSize="13sp" />
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Card 1: Escolha da Imagem -->
+        <!-- Card 1: Nome do App / Presets Rápidos -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1. Imagem da Notificação"
+                    android:text="1. Nome do App na Notificação"
                     android:textColor="@color/text_primary"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -80,7 +80,115 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Escolha a imagem que aparecerá na notificação"
+                    android:text="O nome que aparece no topo da notificação no Android"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp" />
+
+                <!-- Presets Rápidos -->
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnPresetNubank"
+                            style="@style/Widget.Material3.Button.TonalButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="38dp"
+                            android:layout_marginEnd="8dp"
+                            android:text="🟣 Nubank"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnPresetWhatsApp"
+                            style="@style/Widget.Material3.Button.TonalButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="38dp"
+                            android:layout_marginEnd="8dp"
+                            android:text="🟢 WhatsApp"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnPresetInstagram"
+                            style="@style/Widget.Material3.Button.TonalButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="38dp"
+                            android:layout_marginEnd="8dp"
+                            android:text="🔴 Instagram"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnPresetMercadoPago"
+                            style="@style/Widget.Material3.Button.TonalButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="38dp"
+                            android:text="🟡 Mercado Pago"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+                <!-- Input Nome do App -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:hint="Nome do App / Remetente Customizado"
+                    android:textColorHint="@color/text_secondary"
+                    app:boxBackgroundColor="#141E33"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxStrokeColor="@color/accent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etAppName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textCapWords"
+                        android:text="Nubank"
+                        android:textColor="@color/text_primary" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Card 2: Escolha da Imagem -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="@color/card_bg"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/border_color"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2. Imagem da Notificação"
+                    android:textColor="@color/text_primary"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Escolha a foto ou banner da galeria"
                     android:textColor="@color/text_secondary"
                     android:textSize="12sp" />
 
@@ -146,7 +254,7 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Card 2: Conteúdo -->
+        <!-- Card 3: Conteúdo (Título + Mensagem) -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -166,7 +274,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2. Conteúdo da Mensagem"
+                    android:text="3. Conteúdo da Mensagem"
                     android:textColor="@color/text_primary"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -176,7 +284,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:hint="Título / Remetente"
+                    android:hint="Título / Assunto Principal"
                     android:textColorHint="@color/text_secondary"
                     app:boxBackgroundColor="#141E33"
                     app:boxCornerRadiusBottomEnd="8dp"
@@ -190,7 +298,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textCapSentences"
-                        android:text="Nubank"
+                        android:text="Transferência recebida"
                         android:textColor="@color/text_primary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -221,7 +329,7 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Card 3: Tipo da Notificação -->
+        <!-- Card 4: Tipo da Notificação -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -241,7 +349,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="3. Tipo de Notificação"
+                    android:text="4. Tipo de Notificação"
                     android:textColor="@color/text_primary"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -253,22 +361,22 @@
                     android:layout_marginTop="10dp">
 
                     <RadioButton
-                        android:id="@+id/rbBigPicture"
+                        android:id="@+id/rbPix"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:checked="true"
                         android:padding="8dp"
-                        android:text="📷 Banner com Imagem Grande (BigPictureStyle)\nA imagem selecionada expande na notificação"
+                        android:text="💰 Estilo Banco / Pix\nNotificação de transferência / comprovante financeiro"
                         android:textColor="@color/text_primary"
                         android:textSize="13sp" />
 
                     <RadioButton
-                        android:id="@+id/rbPix"
+                        android:id="@+id/rbBigPicture"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
                         android:padding="8dp"
-                        android:text="💰 Estilo Banco / Pix\nNotificação de transferência / comprovante financeiro"
+                        android:text="📷 Banner com Imagem Grande (BigPictureStyle)\nA foto selecionada expande na notificação"
                         android:textColor="@color/text_primary"
                         android:textSize="13sp" />
 
@@ -285,7 +393,7 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Card 4: Temporizador -->
+        <!-- Card 5: Temporizador -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -317,7 +425,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:text="4. Temporizador / Delay"
+                        android:text="5. Temporizador / Delay"
                         android:textColor="@color/text_primary"
                         android:textSize="15sp"
                         android:textStyle="bold" />

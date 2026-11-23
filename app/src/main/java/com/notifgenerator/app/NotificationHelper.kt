@@ -13,33 +13,40 @@ import java.io.File
 
 object NotificationHelper {
 
-    const val CHANNEL_ID = "custom_notifications_channel"
-    private const val CHANNEL_NAME = "Notificações Personalizadas"
-    private const val CHANNEL_DESC = "Canal para notificações geradas com imagens e alertas"
-
     const val TYPE_BIG_PICTURE = "BIG_PICTURE"
     const val TYPE_PIX = "PIX"
     const val TYPE_STANDARD = "STANDARD"
 
-    fun createNotificationChannel(context: Context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance).apply {
-                description = CHANNEL_DESC
-                enableVibration(true)
-                vibrationPattern = longArrayOf(0, 300, 200, 300)
-                lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
-                setShowBadge(true)
-            }
+    fun getOrCreateChannel(context: Context, appName: String): String {
+        val safeName = appName.trim().ifEmpty { "Notificações" }
+        val channelId = "channel_${safeName.lowercase().replace(" ", "_")}"
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
+
+            val existingChannel = notificationManager.getNotificationChannel(channelId)
+            if (existingChannel == null) {
+                val channel = NotificationChannel(
+                    channelId,
+                    safeName,
+                    NotificationManager.IMPORTANCE_HIGH
+                ).apply {
+                    description = "Notificações de $safeName"
+                    enableVibration(true)
+                    vibrationPattern = longArrayOf(0, 300, 200, 300)
+                    lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
+                    setShowBadge(true)
+                }
+                notificationManager.createNotificationChannel(channel)
+            }
         }
+        return channelId
     }
 
     fun showNotification(
         context: Context,
+        appName: String,
         title: String,
         message: String,
         type: String,
@@ -48,7 +55,8 @@ object NotificationHelper {
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        // Intent para abrir o app ao clicar na notificação
+        val channelId = getOrCreateChannel(context, appName)
+
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
@@ -67,8 +75,9 @@ object NotificationHelper {
 
         val notificationId = System.currentTimeMillis().toInt()
 
-        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
+        val builder = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.drawable.ic_notification)
+            .setSubText(appName.trim().ifEmpty { "Notificação" }) // Nome alternável do App no topo
             .setContentTitle(title)
             .setContentText(message)
             .setContentIntent(pendingIntent)
@@ -79,7 +88,6 @@ object NotificationHelper {
 
         when (type) {
             TYPE_BIG_PICTURE -> {
-                // Notificação com imagem grande expandida
                 if (bitmap != null) {
                     val bigPicStyle = NotificationCompat.BigPictureStyle()
                         .bigPicture(bitmap)
@@ -94,9 +102,7 @@ object NotificationHelper {
             }
 
             TYPE_PIX -> {
-                // Notificação estilo Bancária / Pix
-                builder.setSubText("Pix Recebido • Banco")
-                builder.setColor(0xFF10B981.toInt()) // Verde Pix
+                builder.setColor(0xFF10B981.toInt()) // Verde Pix / Bancário
                 if (bitmap != null) {
                     builder.setLargeIcon(bitmap)
                 }
@@ -108,7 +114,6 @@ object NotificationHelper {
             }
 
             TYPE_STANDARD -> {
-                // Notificação padrão com avatar/ícone
                 if (bitmap != null) {
                     builder.setLargeIcon(bitmap)
                 }
