@@ -19,7 +19,7 @@ object NotificationHelper {
 
     fun getOrCreateChannel(context: Context, appName: String): String {
         val safeName = appName.trim().ifEmpty { "Notificações" }
-        val channelId = "channel_${safeName.lowercase().replace(" ", "_")}"
+        val channelId = "channel_${safeName.lowercase().replace(" ", "_").ifEmpty { "geral" }}"
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationManager =
@@ -32,7 +32,7 @@ object NotificationHelper {
                     safeName,
                     NotificationManager.IMPORTANCE_HIGH
                 ).apply {
-                    description = "Notificações de $safeName"
+                    description = safeName
                     enableVibration(true)
                     vibrationPattern = longArrayOf(0, 300, 200, 300)
                     lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
@@ -77,7 +77,6 @@ object NotificationHelper {
 
         val builder = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.drawable.ic_notification)
-            .setSubText(appName.trim().ifEmpty { "Notificação" }) // Nome alternável do App no topo
             .setContentTitle(title)
             .setContentText(message)
             .setContentIntent(pendingIntent)
@@ -86,14 +85,18 @@ object NotificationHelper {
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
 
+        // IMPORTANTE: Adiciona subtexto SOMENTE se o usuário digitou algo explicitamente.
+        // Se deixar em branco, NÃO coloca nenhum texto extra!
+        if (appName.trim().isNotEmpty()) {
+            builder.setSubText(appName.trim())
+        }
+
         when (type) {
             TYPE_BIG_PICTURE -> {
                 if (bitmap != null) {
                     val bigPicStyle = NotificationCompat.BigPictureStyle()
                         .bigPicture(bitmap)
                         .setBigContentTitle(title)
-                        .setSummaryText(message)
-
                     builder.setStyle(bigPicStyle)
                     builder.setLargeIcon(bitmap)
                 } else {
@@ -102,14 +105,14 @@ object NotificationHelper {
             }
 
             TYPE_PIX -> {
-                builder.setColor(0xFF10B981.toInt()) // Verde Pix / Bancário
+                builder.setColor(0xFF10B981.toInt()) // Verde destaque
                 if (bitmap != null) {
                     builder.setLargeIcon(bitmap)
                 }
+                // BigTextStyle 100% limpo: sem resumos fixos, sem "Transferência Instantânea", sem "Pix Recebido"
                 val pixStyle = NotificationCompat.BigTextStyle()
                     .setBigContentTitle(title)
                     .bigText(message)
-                    .setSummaryText("Transferência Instantânea")
                 builder.setStyle(pixStyle)
             }
 

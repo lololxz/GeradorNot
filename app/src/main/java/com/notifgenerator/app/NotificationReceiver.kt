@@ -7,13 +7,13 @@ import android.content.Intent
 class NotificationReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        val appName = intent.getStringExtra("EXTRA_APP_NAME") ?: "Nubank"
-        val title = intent.getStringExtra("EXTRA_TITLE") ?: "Nova Notificação"
+        val appName = intent.getStringExtra("EXTRA_APP_NAME") ?: ""
+        val title = intent.getStringExtra("EXTRA_TITLE") ?: ""
         val message = intent.getStringExtra("EXTRA_MESSAGE") ?: ""
-        val type = intent.getStringExtra("EXTRA_TYPE") ?: NotificationHelper.TYPE_BIG_PICTURE
+        val type = intent.getStringExtra("EXTRA_TYPE") ?: NotificationHelper.TYPE_STANDARD
         val imagePath = intent.getStringExtra("EXTRA_IMAGE_PATH")
 
-        // Exibir notificação com nome dinâmico do app
+        // Exibir notificação
         NotificationHelper.showNotification(
             context = context,
             appName = appName,

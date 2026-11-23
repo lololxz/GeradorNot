@@ -66,18 +66,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupPresets() {
+        binding.btnPresetLimpo.setOnClickListener {
+            binding.etAppName.setText("")
+            Toast.makeText(this, "Subtexto limpo! A notificação não terá nenhum texto extra.", Toast.LENGTH_SHORT).show()
+        }
+
         binding.btnPresetNubank.setOnClickListener {
             binding.etAppName.setText("Nubank")
             binding.etTitle.setText("Transferência recebida")
-            binding.etMessage.setText("Você recebeu uma transferência Pix de R$ 1.500,00 de Banco Central.")
-            binding.rbPix.isChecked = true
+            binding.etMessage.setText("Você recebeu uma transferência Pix de R$ 1.500,00.")
             Toast.makeText(this, "Preset Nubank aplicado!", Toast.LENGTH_SHORT).show()
         }
 
         binding.btnPresetWhatsApp.setOnClickListener {
             binding.etAppName.setText("WhatsApp")
             binding.etTitle.setText("Contato")
-            binding.etMessage.setText("Oi! Você já viu as novas fotos que te enviei?")
+            binding.etMessage.setText("Oi! Tudo bem?")
             binding.rbStandard.isChecked = true
             Toast.makeText(this, "Preset WhatsApp aplicado!", Toast.LENGTH_SHORT).show()
         }
@@ -85,7 +89,7 @@ class MainActivity : AppCompatActivity() {
         binding.btnPresetInstagram.setOnClickListener {
             binding.etAppName.setText("Instagram")
             binding.etTitle.setText("Nova publicação")
-            binding.etMessage.setText("Um usuário acabou de publicar uma nova foto. Toque para ver.")
+            binding.etMessage.setText("Publicou uma nova foto.")
             binding.rbBigPicture.isChecked = true
             Toast.makeText(this, "Preset Instagram aplicado!", Toast.LENGTH_SHORT).show()
         }
@@ -93,8 +97,7 @@ class MainActivity : AppCompatActivity() {
         binding.btnPresetMercadoPago.setOnClickListener {
             binding.etAppName.setText("Mercado Pago")
             binding.etTitle.setText("Pix recebido!")
-            binding.etMessage.setText("Você recebeu um Pix de R$ 380,00 na sua conta.")
-            binding.rbPix.isChecked = true
+            binding.etMessage.setText("Você recebeu um Pix na sua conta.")
             Toast.makeText(this, "Preset Mercado Pago aplicado!", Toast.LENGTH_SHORT).show()
         }
     }
@@ -144,9 +147,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun triggerNotification() {
-        val appName = binding.etAppName.text.toString().trim().ifEmpty { "Notificação" }
-        val title = binding.etTitle.text.toString().trim().ifEmpty { "Nova Notificação" }
-        val message = binding.etMessage.text.toString().trim().ifEmpty { "Mensagem de teste." }
+        // Pega EXATAMENTE o que o usuário digitou, sem forçar textos automáticos!
+        val appName = binding.etAppName.text?.toString()?.trim() ?: ""
+        val title = binding.etTitle.text?.toString()?.trim() ?: ""
+        val message = binding.etMessage.text?.toString()?.trim() ?: ""
 
         val type = when (binding.rgNotifType.checkedRadioButtonId) {
             R.id.rbBigPicture -> NotificationHelper.TYPE_BIG_PICTURE
@@ -170,7 +174,7 @@ class MainActivity : AppCompatActivity() {
                 type = type,
                 imagePath = cachedImagePath
             )
-            Toast.makeText(this, "Notificação de $appName disparada!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Notificação disparada!", Toast.LENGTH_SHORT).show()
         } else {
             scheduleNotification(appName, title, message, type, delaySeconds)
         }
@@ -219,7 +223,7 @@ class MainActivity : AppCompatActivity() {
 
             Toast.makeText(
                 this,
-                "⏰ Notificação de $appName agendada para daqui a $delaySeconds segundos! Bloqueie a tela para testar.",
+                "⏰ Notificação agendada para daqui a $delaySeconds segundos! Bloqueie a tela para testar.",
                 Toast.LENGTH_LONG
             ).show()
         } catch (e: SecurityException) {

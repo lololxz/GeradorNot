@@ -45,13 +45,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Alterne nomes, imagens, estilos e timers"
+                    android:text="100% personalizável: apenas o que você digitar"
                     android:textColor="@color/text_secondary"
                     android:textSize="13sp" />
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Card 1: Nome do App / Presets Rápidos -->
+        <!-- Card 1: Subtexto / Nome do App (Opcional) -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1. Nome do App na Notificação"
+                    android:text="1. Subtexto / Nome do App (Opcional)"
                     android:textColor="@color/text_primary"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -80,7 +80,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="O nome que aparece no topo da notificação no Android"
+                    android:text="Se deixar vazio, NENHUM texto extra aparecerá!"
                     android:textColor="@color/text_secondary"
                     android:textSize="12sp" />
 
@@ -95,6 +95,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnPresetLimpo"
+                            style="@style/Widget.Material3.Button.TonalButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="38dp"
+                            android:layout_marginEnd="8dp"
+                            android:text="❌ Deixar Vazio"
+                            android:textSize="12sp" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btnPresetNubank"
@@ -138,7 +147,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:hint="Nome do App / Remetente Customizado"
+                    android:hint="Subtexto no topo (deixe vazio se não quiser nada)"
                     android:textColorHint="@color/text_secondary"
                     app:boxBackgroundColor="#141E33"
                     app:boxCornerRadiusBottomEnd="8dp"
@@ -152,7 +161,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textCapWords"
-                        android:text="Nubank"
+                        android:text=""
                         android:textColor="@color/text_primary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -179,7 +188,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2. Imagem da Notificação"
+                    android:text="2. Imagem / Ícone da Notificação"
                     android:textColor="@color/text_primary"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -188,7 +197,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="Escolha a foto ou banner da galeria"
+                    android:text="Escolha a foto que aparecerá na notificação"
                     android:textColor="@color/text_secondary"
                     android:textSize="12sp" />
 
@@ -284,7 +293,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:hint="Título / Assunto Principal"
+                    android:hint="Título Principal"
                     android:textColorHint="@color/text_secondary"
                     app:boxBackgroundColor="#141E33"
                     app:boxCornerRadiusBottomEnd="8dp"
@@ -298,7 +307,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textCapSentences"
-                        android:text="Transferência recebida"
+                        android:text="Nova Venda!"
                         android:textColor="@color/text_primary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -307,7 +316,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:hint="Mensagem / Descrição"
+                    android:hint="Mensagem / Texto"
                     android:textColorHint="@color/text_secondary"
                     app:boxBackgroundColor="#141E33"
                     app:boxCornerRadiusBottomEnd="8dp"
@@ -323,7 +332,7 @@
                         android:gravity="top|start"
                         android:inputType="textMultiLine"
                         android:lines="3"
-                        android:text="Você recebeu uma transferência Pix de R$ 1.500,00 de Banco Central."
+                        android:text="Você recebeu R$ 13,88"
                         android:textColor="@color/text_primary" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
@@ -349,7 +358,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="4. Tipo de Notificação"
+                    android:text="4. Estilo Visual da Notificação"
                     android:textColor="@color/text_primary"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -366,7 +375,7 @@
                         android:layout_height="wrap_content"
                         android:checked="true"
                         android:padding="8dp"
-                        android:text="💰 Estilo Banco / Pix\nNotificação de transferência / comprovante financeiro"
+                        android:text="🔔 Padrão Limpo (Sem textos automáticos)\nExibe apenas o título, imagem e mensagem que você configurou"
                         android:textColor="@color/text_primary"
                         android:textSize="13sp" />
 
@@ -376,7 +385,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
                         android:padding="8dp"
-                        android:text="📷 Banner com Imagem Grande (BigPictureStyle)\nA foto selecionada expande na notificação"
+                        android:text="📷 Banner com Imagem Grande (BigPictureStyle)\nA foto selecionada expande como um banner na notificação"
                         android:textColor="@color/text_primary"
                         android:textSize="13sp" />
 
@@ -386,7 +395,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
                         android:padding="8dp"
-                        android:text="🔔 Padrão / Alerta com Foto\nFoto exibida no ícone de perfil com texto completo"
+                        android:text="👤 Ícone de Perfil / Chat\nFoto em miniatura ao lado do texto"
                         android:textColor="@color/text_primary"
                         android:textSize="13sp" />
                 </RadioGroup>
